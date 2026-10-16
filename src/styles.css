@@ -1087,3 +1087,70 @@ input[type='range']::-webkit-slider-thumb {
   color: var(--muted);
   font-size: 15px;
 }
+
+/* ---------- Étape 6 : SOS ---------- */
+.breath-stage {
+  position: relative;
+  height: 250px;
+  display: grid;
+  place-items: center;
+}
+
+.breath-circle {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(127, 184, 164, 0.35) 0%, rgba(127, 184, 164, 0.12) 70%);
+  border: 2px solid rgba(127, 184, 164, 0.6);
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+  will-change: transform;
+}
+
+.breath-label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.breath-label b {
+  font-size: 24px;
+}
+
+.breath-label small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.breath-count {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.scroll-target {
+  scroll-margin-top: 90px;
+}
+
+.note-text {
+  white-space: pre-wrap;
+}
+
+.notes {
+  margin-top: 10px;
+}
+
+.inline-tel {
+  color: var(--warm);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breath-circle {
+    transition: none !important;
+  }
+}

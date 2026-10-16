@@ -23,6 +23,6 @@ npm run build      # version de production dans dist/
 3. ✅ Progression et graphiques
 4. ✅ Carnet de preuves, défis, XP, séries et jokers
 5. ✅ Rappels
-6. SOS
+6. ✅ SOS
 7. Le Confident
 8. Code PIN, export, finitions

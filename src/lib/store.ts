@@ -48,6 +48,8 @@ export interface AppData {
   /** Chaque début (ou reprise) de phase, du plus ancien au plus récent. */
   phaseHistory: { phase: Phase; start: string }[]
   days: Record<string, DayLog>
+  /** « Écris ce que tu ressens » (SOS) : seulement ce que tu as choisi de garder. */
+  sosNotes: { id: string; at: string; text: string }[]
 }
 
 const KEY = 'pointzero:v1'
@@ -71,6 +73,7 @@ function defaults(): AppData {
     phaseStartDate: today,
     phaseHistory: [{ phase: 1, start: today }],
     days: {},
+    sosNotes: [],
   }
 }
 
@@ -161,6 +164,15 @@ export function startPhase(phase: Phase) {
     phaseStartDate: today,
     phaseHistory: [...d.phaseHistory.filter((h) => h.start !== today), { phase, start: today }],
   }))
+}
+
+export function addSosNote(text: string) {
+  const note = { id: Date.now().toString(36), at: new Date().toISOString(), text }
+  update((d) => ({ ...d, sosNotes: [note, ...d.sosNotes] }))
+}
+
+export function deleteSosNote(id: string) {
+  update((d) => ({ ...d, sosNotes: d.sosNotes.filter((n) => n.id !== id) }))
 }
 
 export function eraseAll() {
