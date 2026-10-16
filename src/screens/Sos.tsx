@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { PhoneIcon } from '../Icons'
-import { go } from '../lib/router'
 import { addSosNote, deleteSosNote, useData } from '../lib/store'
 import Breathing from './Breathing'
 
@@ -131,11 +130,11 @@ export default function Sos() {
       </div>
 
       <section className="card">
-        <h3>Parler au Confident</h3>
-        <p className="muted small">Il t'écoute et t'aide à y voir plus clair. Ce n'est pas un psy, mais il est là.</p>
-        <button className="btn secondary" onClick={() => go('confident')}>
-          Ouvrir le Confident
-        </button>
+        <h3>Parler à quelqu'un</h3>
+        <p className="muted small">
+          Écrire aide. Parler à une vraie personne aide encore plus : un ami de confiance, ta famille,
+          l'infirmière ou le centre PMS de l'école, un médecin. Ou le 107, juste pour être écouté.
+        </p>
       </section>
 
       <p className="muted small center">

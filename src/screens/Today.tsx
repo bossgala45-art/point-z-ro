@@ -214,8 +214,8 @@ export default function Today() {
         </div>
       </section>
 
-      <button className="btn secondary big" onClick={() => go('confident')}>
-        Parler au Confident
+      <button className="btn secondary big" onClick={() => go('sos')}>
+        Besoin de souffler ? SOS
       </button>
 
       {toast && (

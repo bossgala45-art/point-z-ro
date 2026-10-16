@@ -3,6 +3,8 @@ import { askPersistentStorage, useData } from './lib/store'
 import { back, go, PARENT, useRoute, type Route } from './lib/router'
 import { BookIcon, ChartIcon, ChatIcon, GearIcon, SunIcon } from './Icons'
 import Welcome from './screens/Welcome'
+import Lock from './screens/Lock'
+import { useLock } from './lib/pin'
 import Today from './screens/Today'
 import Progress from './screens/Progress'
 import Journal from './screens/Journal'
@@ -37,9 +39,12 @@ export default function App() {
   const data = useData()
   const route = useRoute()
 
+  const { locked, unlock } = useLock(Boolean(data.settings.pinHash))
+
   useEffect(askPersistentStorage, [])
 
   if (!data.settings.firstName) return <Welcome />
+  if (locked) return <Lock onUnlock={unlock} />
 
   const parent = PARENT[route]
   const activeTab = parent ?? route

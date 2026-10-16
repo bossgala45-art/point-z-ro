@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { eraseAll, updateSettings, useData, type Settings } from '../lib/store'
+import { updateSettings, useData, type Settings } from '../lib/store'
 import { go } from '../lib/router'
 import InstallHelp from './InstallHelp'
+import PinSettings from './PinSettings'
+import DataSettings from './DataSettings'
 
 function TimeField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
@@ -14,8 +15,6 @@ function TimeField({ label, value, onChange }: { label: string; value: string; o
 
 export default function SettingsScreen() {
   const { settings } = useData()
-  const [showKey, setShowKey] = useState(false)
-  const [confirmErase, setConfirmErase] = useState(false)
 
   const setReminder = (k: keyof Settings['reminders'], v: string) =>
     updateSettings({ reminders: { ...settings.reminders, [k]: v } })
@@ -63,66 +62,20 @@ export default function SettingsScreen() {
         </span>
       </button>
 
-      <section className="card">
-        <h3>Clé API du Confident</h3>
-        <p className="muted small">
-          Pour parler au Confident (étape 7). Ta clé reste sur ce téléphone et sert seulement à
-          contacter Claude.
-        </p>
-        <div className="key-row">
-          <input
-            type={showKey ? 'text' : 'password'}
-            value={settings.apiKey}
-            onChange={(e) => updateSettings({ apiKey: e.target.value.trim() })}
-            placeholder="sk-ant-…"
-            autoComplete="off"
-            autoCapitalize="off"
-            spellCheck={false}
-          />
-          <button className="btn ghost" onClick={() => setShowKey((s) => !s)}>
-            {showKey ? 'Cacher' : 'Voir'}
-          </button>
-        </div>
-      </section>
+      <PinSettings />
 
       <section className="card soon">
-        <h3>Code PIN et export</h3>
-        <p className="muted small">Arrivent à l'étape 8.</p>
+        <h3>Le Confident</h3>
+        <p className="muted small">
+          Pas encore activé. Quand on le construira, c'est ici que tu mettras ta clé API.
+        </p>
       </section>
 
       <InstallHelp />
 
-      <section className="card danger-zone">
-        <h3>Tout effacer</h3>
-        {!confirmErase ? (
-          <>
-            <p className="muted small">Supprime toutes tes données de ce téléphone.</p>
-            <button className="btn danger-outline" onClick={() => setConfirmErase(true)}>
-              Tout effacer…
-            </button>
-          </>
-        ) : (
-          <>
-            <p>Sûr ? Ça ne peut pas être annulé.</p>
-            <div className="btn-row">
-              <button className="btn ghost" onClick={() => setConfirmErase(false)}>
-                Annuler
-              </button>
-              <button
-                className="btn danger"
-                onClick={() => {
-                  eraseAll()
-                  go('aujourdhui')
-                }}
-              >
-                Oui, tout effacer
-              </button>
-            </div>
-          </>
-        )}
-      </section>
+      <DataSettings />
 
-      <p className="fine center">Point Zéro · étape 6</p>
+      <p className="fine center">Point Zéro · v1.0</p>
     </div>
   )
 }

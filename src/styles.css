@@ -1154,3 +1154,116 @@ input[type='range']::-webkit-slider-thumb {
     transition: none !important;
   }
 }
+
+/* ---------- Étape 8 : code PIN, données ---------- */
+.lock {
+  min-height: 100dvh;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 40px) 16px calc(env(safe-area-inset-bottom) + 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.small-mark {
+  width: 52px;
+  height: 52px;
+  border-width: 6px;
+}
+
+.small-mark span {
+  width: 10px;
+  height: 10px;
+}
+
+.pinpad {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.pinpad h2 {
+  font-size: 24px;
+}
+
+.pin-dots {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.pin-dots .dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+}
+
+.pin-dots .dot.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.pin-dots.shake {
+  animation: shake 0.35s ease;
+}
+
+@keyframes shake {
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.pin-error {
+  min-height: 22px;
+  color: var(--warm);
+  font-size: 15px;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 76px);
+  gap: 14px 22px;
+  justify-content: center;
+}
+
+.key {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.key:active {
+  background: var(--surface-2);
+}
+
+.ghost-key {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  color: var(--muted);
+}
+
+.warn-line {
+  color: var(--warm);
+}
+
+.pinpad .btn.big {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin-dots.shake {
+    animation: none;
+  }
+}

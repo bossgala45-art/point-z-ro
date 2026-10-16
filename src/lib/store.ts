@@ -18,6 +18,11 @@ export interface Settings {
   /** Rappels ajoutés au Calendrier de l'iPhone (heure arrondie "HHMM"), et alarme du réveil réglée. */
   calendar: Partial<Record<'matin' | 'midi' | 'soir', string>>
   alarmSet: boolean
+  /** Code PIN : on garde seulement une empreinte (hash), jamais le code lui-même. Vide = pas de code. */
+  pinHash: string
+  pinSalt: string
+  /** Date de la dernière sauvegarde exportée (ISO). */
+  lastBackup: string
 }
 
 export interface Checkin {
@@ -67,6 +72,9 @@ function defaults(): AppData {
       apiKey: '',
       calendar: {},
       alarmSet: false,
+      pinHash: '',
+      pinSalt: '',
+      lastBackup: '',
     },
     missions: DEFAULT_MISSIONS,
     phase: 1,
@@ -77,26 +85,30 @@ function defaults(): AppData {
   }
 }
 
-function load(): AppData {
+/** Complète des données enregistrées (ou restaurées) avec les valeurs par défaut. */
+export function normalize(saved: Partial<AppData>): AppData {
   const base = defaults()
+  const start = saved.startDate ?? base.startDate
+  return {
+    ...base,
+    phaseStartDate: start,
+    phaseHistory: [{ phase: saved.phase ?? 1, start: saved.phaseStartDate ?? start }],
+    ...saved,
+    settings: {
+      ...base.settings,
+      ...saved.settings,
+      reminders: { ...base.settings.reminders, ...saved.settings?.reminders },
+    },
+  }
+}
+
+function load(): AppData {
   try {
     const raw = localStorage.getItem(KEY)
-    if (!raw) return base
-    const saved = JSON.parse(raw) as Partial<AppData>
-    const start = saved.startDate ?? base.startDate
-    return {
-      ...base,
-      phaseStartDate: start,
-      phaseHistory: [{ phase: saved.phase ?? 1, start: saved.phaseStartDate ?? start }],
-      ...saved,
-      settings: {
-        ...base.settings,
-        ...saved.settings,
-        reminders: { ...base.settings.reminders, ...saved.settings?.reminders },
-      },
-    }
+    if (!raw) return defaults()
+    return normalize(JSON.parse(raw) as Partial<AppData>)
   } catch {
-    return base
+    return defaults()
   }
 }
 
@@ -173,6 +185,21 @@ export function addSosNote(text: string) {
 
 export function deleteSosNote(id: string) {
   update((d) => ({ ...d, sosNotes: d.sosNotes.filter((n) => n.id !== id) }))
+}
+
+/** Remplace toutes les données par une sauvegarde. Le code PIN et la clé API de ce téléphone sont conservés. */
+export function restore(saved: Partial<AppData>) {
+  const keep = data.settings
+  const next = normalize(saved)
+  update(() => ({
+    ...next,
+    settings: { ...next.settings, apiKey: keep.apiKey, pinHash: keep.pinHash, pinSalt: keep.pinSalt },
+  }))
+}
+
+/** Les données en ce moment (pour l'export). */
+export function snapshot(): AppData {
+  return data
 }
 
 export function eraseAll() {
