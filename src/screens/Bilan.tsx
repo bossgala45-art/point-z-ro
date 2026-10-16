@@ -5,6 +5,7 @@ import { activeMissions } from '../lib/missions'
 import { go } from '../lib/router'
 import MissionRow from './MissionRow'
 import { weekCount } from './Today'
+import { levelInfo, totalXp, XP } from '../lib/rewards'
 
 function Scale({
   label,
@@ -72,6 +73,11 @@ export default function Bilan() {
         <section className="hero">
           <p className="eyebrow">Bilan enregistré</p>
           <h2>C'est noté.</h2>
+          {!prev && (
+            <p className="muted">
+              +{XP.checkin} XP · Niveau {levelInfo(totalXp(data)).level}
+            </p>
+          )}
         </section>
         <section className="card proof">
           <p className="muted small">Ajouté à ton Carnet de preuves :</p>

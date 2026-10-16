@@ -894,3 +894,114 @@ input[type='range']::-webkit-slider-thumb {
 .link.center {
   align-self: center;
 }
+
+/* ---------- Étape 4 : carnet, défis, XP, séries ---------- */
+.card.stats {
+  gap: 10px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 8px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stat small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat b {
+  font-size: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat b span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.stat b.dim {
+  color: var(--muted);
+}
+
+.stat b.level-name {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.challenge-text {
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.card.challenge.done {
+  border-color: rgba(127, 184, 164, 0.4);
+}
+
+.card.challenge.done .challenge-text {
+  color: var(--muted);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 20px);
+  transform: translateX(-50%);
+  z-index: 20;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 999px;
+  animation: toast-in 1.4s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes toast-in {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.random-proof {
+  animation: rise 0.35s ease;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.proof-item {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.proof-item small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.proof-item p {
+  margin-top: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .random-proof {
+    animation: none;
+  }
+}

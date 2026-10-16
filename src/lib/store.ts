@@ -30,6 +30,8 @@ export interface DayLog {
   /** Identifiants des missions tenues ce jour-là. */
   done: string[]
   checkin?: Checkin
+  /** Défi du jour : combien de fois tu en as demandé un autre, et s'il est fait. */
+  challenge?: { rerolls: number; done: boolean }
 }
 
 export interface AppData {
@@ -128,6 +130,17 @@ export function setMissionsDone(day: string, done: string[]) {
 
 export function saveCheckin(day: string, checkin: Checkin) {
   updateDay(day, (log) => ({ ...log, checkin }))
+}
+
+export function rerollChallenge(day: string) {
+  updateDay(day, (log) => ({ ...log, challenge: { rerolls: (log.challenge?.rerolls ?? 0) + 1, done: false } }))
+}
+
+export function toggleChallenge(day: string) {
+  updateDay(day, (log) => ({
+    ...log,
+    challenge: { rerolls: log.challenge?.rerolls ?? 0, done: !log.challenge?.done },
+  }))
 }
 
 export function setMissions(missions: Mission[]) {

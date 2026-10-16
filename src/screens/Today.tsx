@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import { dayNumber, toggleMission, useData, type AppData } from '../lib/store'
+import { useEffect, useRef, useState } from 'react'
+import { dayNumber, rerollChallenge, toggleChallenge, toggleMission, useData, type AppData } from '../lib/store'
 import { go } from '../lib/router'
 import { addDays, currentDay, isEvening, weekStart } from '../lib/day'
 import { activeMissions, PHASES, type Mission } from '../lib/missions'
 import MissionRow from './MissionRow'
 import { phaseStatus } from '../lib/phase'
+import { isHeld, levelInfo, streakInfo, totalXp, XP } from '../lib/rewards'
+import { challengeFor } from '../lib/challenges'
+import { Meter } from './Charts'
 
 function greeting(h: number) {
   if (h < 5) return 'Encore debout'
@@ -26,8 +29,20 @@ export function weekCount(data: AppData, id: string, day: string): number {
 function missedYesterday(data: AppData, today: string): boolean {
   const y = addDays(today, -1)
   if (y < data.startDate) return false
-  const log = data.days[y]
-  return !log || (log.done.length === 0 && !log.checkin)
+  return !isHeld(data.days[y])
+}
+
+/** Un petit « +10 XP » qui s'affiche puis disparaît. */
+function useToast() {
+  const [msg, setMsg] = useState<string | null>(null)
+  const timer = useRef<number | undefined>(undefined)
+  useEffect(() => () => window.clearTimeout(timer.current), [])
+  const show = (m: string) => {
+    setMsg(m)
+    window.clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => setMsg(null), 1400)
+  }
+  return [msg, show] as const
 }
 
 function doneMessage(done: number, total: number): string {
@@ -53,6 +68,17 @@ export default function Today() {
   const shown = comeback && focus ? [focus] : list
 
   const phaseSt = phaseStatus(data)
+  const streak = streakInfo(data)
+  const lvl = levelInfo(totalXp(data))
+  const [toast, showToast] = useToast()
+  const challenge = challengeFor(today, log.challenge?.rerolls ?? 0)
+  const challengeDone = Boolean(log.challenge?.done)
+  const rerollsLeft = 2 - (log.challenge?.rerolls ?? 0)
+
+  const onToggle = (id: string) => {
+    if (!log.done.includes(id)) showToast(`+${XP.mission} XP`)
+    toggleMission(today, id)
+  }
   const evening = isEvening()
   const bilanDone = Boolean(log.checkin)
 
@@ -72,6 +98,33 @@ export default function Today() {
           {greeting(new Date().getHours())} {settings.firstName}.
         </h2>
         <p className="muted">Un jour à la fois. C'est tout ce qu'on te demande.</p>
+      </section>
+
+      <section className="card stats">
+        <div className="stat-row">
+          <div className="stat">
+            <small>Série</small>
+            {streak.current === 0 ? (
+              <b>Nouvelle</b>
+            ) : (
+              <b>
+                {streak.current} <span>jour{streak.current > 1 ? 's' : ''}</span>
+              </b>
+            )}
+          </div>
+          <div className="stat">
+            <small>Joker</small>
+            <b className={streak.jokerAvailable ? '' : 'dim'}>{streak.jokerAvailable ? 'Dispo' : 'Utilisé'}</b>
+          </div>
+          <div className="stat">
+            <small>Niveau {lvl.level}</small>
+            <b className="level-name">{lvl.name}</b>
+          </div>
+        </div>
+        <Meter value={lvl.into} max={lvl.span} label="XP vers le niveau suivant" />
+        <p className="fine">
+          {lvl.toNext} XP avant le niveau {lvl.level + 1} · 1 joker par semaine protège ta série
+        </p>
       </section>
 
       {phaseSt.status === 'unlocked' && (
@@ -98,6 +151,7 @@ export default function Today() {
           <p>
             <b>Hier, c'était un jour sans.</b> Un jour raté, c'est un jour. Rien de plus.
           </p>
+          {streak.savedYesterday && <p className="muted">Ton joker de la semaine a protégé ta série.</p>}
           <p className="muted">Aujourd'hui, on reprend avec une seule mission.</p>
         </section>
       )}
@@ -121,7 +175,7 @@ export default function Today() {
               bedtime={settings.bedtime}
               done={log.done.includes(m.id)}
               weekCount={m.perWeek ? weekCount(data, m.id, today) : undefined}
-              onToggle={() => toggleMission(today, m.id)}
+              onToggle={() => onToggle(m.id)}
             />
           ))}
         </div>
@@ -136,14 +190,39 @@ export default function Today() {
 
       {!evening && bilanButton}
 
-      <section className="card soon">
-        <h3>Défi du jour</h3>
-        <p className="muted">Un petit défi de 5 minutes, tiré au hasard (étape 4).</p>
+      <section className={challengeDone ? 'card challenge done' : 'card challenge'}>
+        <div className="card-head">
+          <h3>Défi du jour</h3>
+          <span className="muted small">5 min · +{XP.challenge} XP</span>
+        </div>
+        <p className="challenge-text">{challenge.text}</p>
+        <div className="btn-row">
+          {!challengeDone && rerollsLeft > 0 && (
+            <button className="btn ghost" onClick={() => rerollChallenge(today)}>
+              Un autre
+            </button>
+          )}
+          <button
+            className={challengeDone ? 'btn secondary' : 'btn primary'}
+            onClick={() => {
+              if (!challengeDone) showToast(`+${XP.challenge} XP`)
+              toggleChallenge(today)
+            }}
+          >
+            {challengeDone ? 'Fait ✓' : 'C’est fait'}
+          </button>
+        </div>
       </section>
 
       <button className="btn secondary big" onClick={() => go('confident')}>
         Parler au Confident
       </button>
+
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
     </div>
   )
 }

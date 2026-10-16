@@ -4,6 +4,7 @@ import { go } from '../lib/router'
 import { PHASES, type Phase } from '../lib/missions'
 import { GOOD_DAYS_NEEDED, PHASE_DAYS, phaseStatus, type DayState } from '../lib/phase'
 import { average, firstVsNow, lastDays, totals, weeklyRates, type Metric } from '../lib/stats'
+import { levelInfo, streakInfo, totalXp } from '../lib/rewards'
 import { BarChart, fmtNum, LineChart, longDate, Meter, shortDate } from './Charts'
 
 const METRICS: { key: Metric; label: string; note?: string }[] = [
@@ -274,6 +275,9 @@ export default function Progress() {
   const data = useData()
   const t = totals(data)
   const proofs = Object.values(data.days).filter((d) => d.checkin?.win).length
+  const xp = totalXp(data)
+  const lvl = levelInfo(xp)
+  const streak = streakInfo(data)
 
   return (
     <div className="stack">
@@ -284,6 +288,9 @@ export default function Progress() {
         </p>
         <p className="muted">
           {t.checkins} bilan{t.checkins > 1 ? 's' : ''} · {proofs} preuve{proofs > 1 ? 's' : ''} dans ton carnet
+        </p>
+        <p className="muted">
+          Niveau {lvl.level} · {xp} XP · meilleure série : {streak.best} jour{streak.best > 1 ? 's' : ''}
         </p>
       </section>
 
