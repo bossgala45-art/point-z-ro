@@ -4,6 +4,7 @@ import { go } from '../lib/router'
 import { addDays, currentDay, isEvening, weekStart } from '../lib/day'
 import { activeMissions, PHASES, type Mission } from '../lib/missions'
 import MissionRow from './MissionRow'
+import { phaseStatus } from '../lib/phase'
 
 function greeting(h: number) {
   if (h < 5) return 'Encore debout'
@@ -51,6 +52,7 @@ export default function Today() {
   const focus: Mission | undefined = list[0]
   const shown = comeback && focus ? [focus] : list
 
+  const phaseSt = phaseStatus(data)
   const evening = isEvening()
   const bilanDone = Boolean(log.checkin)
 
@@ -71,6 +73,25 @@ export default function Today() {
         </h2>
         <p className="muted">Un jour à la fois. C'est tout ce qu'on te demande.</p>
       </section>
+
+      {phaseSt.status === 'unlocked' && (
+        <button className="card nav-card highlight" onClick={() => go('progres')}>
+          <span>
+            <h3>Phase {phase + 1} débloquée</h3>
+            <span className="muted small">Tu as tenu 10 bons jours. Va voir la suite.</span>
+          </span>
+          <span aria-hidden>›</span>
+        </button>
+      )}
+      {phaseSt.status === 'redo' && (
+        <button className="card nav-card" onClick={() => go('progres')}>
+          <span>
+            <h3>Ta phase {phase} est terminée</h3>
+            <span className="muted small">On fait le point, sans reproche.</span>
+          </span>
+          <span className="muted" aria-hidden>›</span>
+        </button>
+      )}
 
       {comeback && (
         <section className="card calm">

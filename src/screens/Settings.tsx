@@ -120,7 +120,7 @@ export default function SettingsScreen() {
         )}
       </section>
 
-      <p className="fine center">Point Zéro · étape 2</p>
+      <p className="fine center">Point Zéro · étape 3</p>
     </div>
   )
 }

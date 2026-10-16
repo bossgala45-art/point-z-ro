@@ -636,3 +636,261 @@ input[type='range']::-webkit-slider-thumb {
 .edit-box select {
   background: var(--surface);
 }
+
+/* ---------- Étape 3 : progression et graphiques ---------- */
+:root {
+  --viz: #3fa883; /* couleur des courbes et colonnes (validée sur fond sombre) */
+  --viz-track: rgba(63, 168, 131, 0.18);
+  --grid: #2a2f38;
+}
+
+.hero-figure {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 6px 0 6px;
+}
+
+.hero-figure span {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.card.highlight {
+  border-color: var(--accent);
+  background: rgba(127, 184, 164, 0.08);
+}
+
+.meter {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--viz-track);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--viz);
+  transition: width 0.4s ease;
+}
+
+.meter-head b {
+  font-size: 22px;
+}
+
+.day-strip {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 4px;
+}
+
+.cell {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: var(--surface-2);
+}
+
+.cell.good {
+  background: var(--viz);
+}
+
+.cell.some {
+  background: var(--viz-track);
+}
+
+.cell.none {
+  background: var(--surface-2);
+}
+
+.cell.future {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.strip-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.strip-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.strip-legend .cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 16px;
+  row-gap: 10px;
+  align-items: baseline;
+}
+
+.compare-row {
+  display: contents;
+}
+
+.compare > span.small {
+  text-align: right;
+  font-size: 13px;
+}
+
+.compare-val {
+  text-align: right;
+  font-size: 20px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.delta {
+  margin-left: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.delta.good {
+  color: var(--accent);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 2px 0;
+}
+
+.segmented {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.segmented button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  min-height: 38px;
+}
+
+.segmented button.on {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chart-readout {
+  min-height: 24px;
+  font-size: 15px;
+}
+
+.chart-readout b {
+  font-size: 17px;
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chart-svg .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.chart-svg .tick {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-svg .end-label {
+  fill: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chart-svg .viz-line {
+  fill: none;
+  stroke: var(--viz);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-svg .viz-dot {
+  fill: var(--viz);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.chart-svg .crosshair {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.chart-svg .viz-bar {
+  fill: var(--viz);
+}
+
+.chart-svg .viz-bar.active {
+  fill: #52b993;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.data-table td {
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.data-table th:not(:first-child),
+.data-table td:not(:first-child) {
+  text-align: right;
+}
+
+.link.center {
+  align-self: center;
+}

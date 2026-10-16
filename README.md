@@ -20,7 +20,7 @@ npm run build      # version de production dans dist/
 
 1. ✅ Structure, navigation, design et Réglages
 2. ✅ Aujourd'hui, missions et bilan du soir
-3. Progression et graphiques
+3. ✅ Progression et graphiques
 4. Carnet de preuves, défis, XP, séries et jokers
 5. Rappels
 6. SOS

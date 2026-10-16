@@ -40,6 +40,8 @@ export interface AppData {
   missions: Mission[]
   phase: Phase
   phaseStartDate: string
+  /** Chaque début (ou reprise) de phase, du plus ancien au plus récent. */
+  phaseHistory: { phase: Phase; start: string }[]
   days: Record<string, DayLog>
 }
 
@@ -60,6 +62,7 @@ function defaults(): AppData {
     missions: DEFAULT_MISSIONS,
     phase: 1,
     phaseStartDate: today,
+    phaseHistory: [{ phase: 1, start: today }],
     days: {},
   }
 }
@@ -70,9 +73,11 @@ function load(): AppData {
     const raw = localStorage.getItem(KEY)
     if (!raw) return base
     const saved = JSON.parse(raw) as Partial<AppData>
+    const start = saved.startDate ?? base.startDate
     return {
       ...base,
-      phaseStartDate: saved.startDate ?? base.phaseStartDate,
+      phaseStartDate: start,
+      phaseHistory: [{ phase: saved.phase ?? 1, start: saved.phaseStartDate ?? start }],
       ...saved,
       settings: {
         ...base.settings,
@@ -127,6 +132,17 @@ export function saveCheckin(day: string, checkin: Checkin) {
 
 export function setMissions(missions: Mission[]) {
   update((d) => ({ ...d, missions }))
+}
+
+/** Passe à la phase suivante, à partir d'aujourd'hui. */
+export function startPhase(phase: Phase) {
+  const today = currentDay()
+  update((d) => ({
+    ...d,
+    phase,
+    phaseStartDate: today,
+    phaseHistory: [...d.phaseHistory.filter((h) => h.start !== today), { phase, start: today }],
+  }))
 }
 
 export function eraseAll() {
