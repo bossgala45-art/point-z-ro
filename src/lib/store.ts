@@ -15,6 +15,9 @@ export interface Settings {
     evening: string
   }
   apiKey: string
+  /** Rappels ajoutés au Calendrier de l'iPhone (heure arrondie "HHMM"), et alarme du réveil réglée. */
+  calendar: Partial<Record<'matin' | 'midi' | 'soir', string>>
+  alarmSet: boolean
 }
 
 export interface Checkin {
@@ -60,6 +63,8 @@ function defaults(): AppData {
       wakeTime: '06:30',
       reminders: { morning: '06:30', noon: '12:30', evening: '23:15' },
       apiKey: '',
+      calendar: {},
+      alarmSet: false,
     },
     missions: DEFAULT_MISSIONS,
     phase: 1,

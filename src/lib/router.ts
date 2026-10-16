@@ -9,13 +9,15 @@ export type Route =
   | 'sos'
   | 'bilan'
   | 'missions'
+  | 'rappels'
 
-const ROUTES: Route[] = ['aujourdhui', 'progres', 'carnet', 'confident', 'reglages', 'sos', 'bilan', 'missions']
+const ROUTES: Route[] = ['aujourdhui', 'progres', 'carnet', 'confident', 'reglages', 'sos', 'bilan', 'missions', 'rappels']
 
 /** Écrans « enfants » : ils ont un bouton retour et allument l'onglet parent. */
 export const PARENT: Partial<Record<Route, Route>> = {
   bilan: 'aujourdhui',
   missions: 'reglages',
+  rappels: 'reglages',
 }
 
 export function back(fallback: Route) {

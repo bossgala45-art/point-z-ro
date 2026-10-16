@@ -11,6 +11,7 @@ import SettingsScreen from './screens/Settings'
 import Sos from './screens/Sos'
 import Bilan from './screens/Bilan'
 import MissionsEditor from './screens/MissionsEditor'
+import Reminders from './screens/Reminders'
 
 const TABS: { route: Route; label: string; Icon: () => React.JSX.Element }[] = [
   { route: 'aujourdhui', label: "Aujourd'hui", Icon: SunIcon },
@@ -29,6 +30,7 @@ const TITLES: Record<Route, string> = {
   sos: 'SOS',
   bilan: 'Bilan du soir',
   missions: 'Mes missions',
+  rappels: 'Mes rappels',
 }
 
 export default function App() {
@@ -70,6 +72,7 @@ export default function App() {
         {route === 'sos' && <Sos />}
         {route === 'bilan' && <Bilan />}
         {route === 'missions' && <MissionsEditor />}
+        {route === 'rappels' && <Reminders />}
       </main>
 
       <nav className="tabbar">

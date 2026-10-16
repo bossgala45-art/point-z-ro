@@ -7,7 +7,7 @@ function TimeField({ label, value, onChange }: { label: string; value: string; o
   return (
     <label className="row-field">
       <span>{label}</span>
-      <input type="time" value={value} onChange={(e) => e.target.value && onChange(e.target.value)} />
+      <input type="time" step={300} value={value} onChange={(e) => e.target.value && onChange(e.target.value)} />
     </label>
   )
 }
@@ -48,7 +48,9 @@ export default function SettingsScreen() {
         <TimeField label="Matin" value={settings.reminders.morning} onChange={(v) => setReminder('morning', v)} />
         <TimeField label="Midi" value={settings.reminders.noon} onChange={(v) => setReminder('noon', v)} />
         <TimeField label="Soir" value={settings.reminders.evening} onChange={(v) => setReminder('evening', v)} />
-        <p className="muted small">Les rappels s'activent à l'étape 5.</p>
+        <button className="btn secondary" onClick={() => go('rappels')}>
+          Activer mes rappels sur l'iPhone ›
+        </button>
       </section>
 
       <button className="card nav-card" onClick={() => go('missions')}>
@@ -120,7 +122,7 @@ export default function SettingsScreen() {
         )}
       </section>
 
-      <p className="fine center">Point Zéro · étape 4</p>
+      <p className="fine center">Point Zéro · étape 5</p>
     </div>
   )
 }

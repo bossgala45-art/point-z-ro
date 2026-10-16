@@ -1005,3 +1005,85 @@ input[type='range']::-webkit-slider-thumb {
     animation: none;
   }
 }
+
+/* ---------- Étape 5 : rappels ---------- */
+.quote {
+  display: block;
+  margin: 6px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+}
+
+.small-btn {
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 15px;
+}
+
+.done-card {
+  border-color: rgba(127, 184, 164, 0.4);
+}
+
+.reminder-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.reminder-row.added {
+  border-color: rgba(127, 184, 164, 0.4);
+}
+
+.reminder-row .btn {
+  flex-shrink: 0;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 10px 16px;
+  font-size: 16px;
+}
+
+.reminder-row .btn.secondary {
+  background: var(--surface);
+}
+
+.reminder-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reminder-txt small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.reminder-txt small.warn-txt {
+  color: var(--warm);
+}
+
+.help summary {
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.help ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
