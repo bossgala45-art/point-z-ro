@@ -51,10 +51,15 @@ export default function SettingsScreen() {
         <p className="muted small">Les rappels s'activent à l'étape 5.</p>
       </section>
 
-      <section className="card soon">
-        <h3>Missions</h3>
-        <p className="muted small">Tu pourras les modifier ici dès l'étape 2.</p>
-      </section>
+      <button className="card nav-card" onClick={() => go('missions')}>
+        <span>
+          <h3>Missions</h3>
+          <span className="muted small">Modifier, ajouter ou retirer tes missions.</span>
+        </span>
+        <span className="muted" aria-hidden>
+          ›
+        </span>
+      </button>
 
       <section className="card">
         <h3>Clé API du Confident</h3>
@@ -115,7 +120,7 @@ export default function SettingsScreen() {
         )}
       </section>
 
-      <p className="fine center">Point Zéro · étape 1</p>
+      <p className="fine center">Point Zéro · étape 2</p>
     </div>
   )
 }

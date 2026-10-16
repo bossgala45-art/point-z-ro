@@ -397,3 +397,242 @@ input[type='time'] {
   color: var(--warm);
   flex-shrink: 0;
 }
+
+/* ---------- Étape 2 : missions et bilan ---------- */
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.back {
+  background: none;
+  border: none;
+  font-size: 34px;
+  line-height: 1;
+  padding: 0 10px 4px 0;
+  color: var(--accent);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.count {
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(127, 184, 164, 0.15);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.badge.dim {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.card.calm {
+  border-color: rgba(226, 176, 127, 0.35);
+  background: rgba(226, 176, 127, 0.06);
+}
+
+.mission {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.mission .check {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  display: grid;
+  place-items: center;
+  color: var(--accent-ink);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.mission.done {
+  background: rgba(127, 184, 164, 0.1);
+  border-color: rgba(127, 184, 164, 0.4);
+}
+
+.mission.done .check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.mission-txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mission-txt small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 4px 0;
+  color: var(--accent);
+  font-weight: 600;
+  text-align: left;
+}
+
+textarea {
+  font: inherit;
+  font-size: 17px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 100%;
+  resize: vertical;
+  outline: none;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+}
+
+select {
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.scale {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scale-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.scale-head b {
+  font-size: 24px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.scale-ends {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  height: 36px;
+  background: transparent;
+  border: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--bg);
+}
+
+.proof {
+  border-color: rgba(127, 184, 164, 0.4);
+}
+
+.proof-text {
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.nav-card {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-card > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.edit-row small {
+  color: var(--muted);
+}
+
+.edit-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+}
+
+.edit-box input,
+.edit-box select {
+  background: var(--surface);
+}

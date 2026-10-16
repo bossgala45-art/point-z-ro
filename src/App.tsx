@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { askPersistentStorage, useData } from './lib/store'
-import { go, useRoute, type Route } from './lib/router'
+import { back, go, PARENT, useRoute, type Route } from './lib/router'
 import { BookIcon, ChartIcon, ChatIcon, GearIcon, SunIcon } from './Icons'
 import Welcome from './screens/Welcome'
 import Today from './screens/Today'
@@ -9,6 +9,8 @@ import Journal from './screens/Journal'
 import Confident from './screens/Confident'
 import SettingsScreen from './screens/Settings'
 import Sos from './screens/Sos'
+import Bilan from './screens/Bilan'
+import MissionsEditor from './screens/MissionsEditor'
 
 const TABS: { route: Route; label: string; Icon: () => React.JSX.Element }[] = [
   { route: 'aujourdhui', label: "Aujourd'hui", Icon: SunIcon },
@@ -25,6 +27,8 @@ const TITLES: Record<Route, string> = {
   confident: 'Le Confident',
   reglages: 'Réglages',
   sos: 'SOS',
+  bilan: 'Bilan du soir',
+  missions: 'Mes missions',
 }
 
 export default function App() {
@@ -35,10 +39,21 @@ export default function App() {
 
   if (!data.settings.firstName) return <Welcome />
 
+  const parent = PARENT[route]
+  const activeTab = parent ?? route
+  const showBack = parent !== undefined || route === 'sos'
+
   return (
     <div className="app">
       <header className="topbar">
-        <h1>{TITLES[route]}</h1>
+        <div className="topbar-title">
+          {showBack && (
+            <button className="back" onClick={() => back(parent ?? 'aujourdhui')} aria-label="Retour">
+              ‹
+            </button>
+          )}
+          <h1>{TITLES[route]}</h1>
+        </div>
         {route !== 'sos' && (
           <button className="sos-pill" onClick={() => go('sos')}>
             SOS
@@ -53,15 +68,17 @@ export default function App() {
         {route === 'confident' && <Confident />}
         {route === 'reglages' && <SettingsScreen />}
         {route === 'sos' && <Sos />}
+        {route === 'bilan' && <Bilan />}
+        {route === 'missions' && <MissionsEditor />}
       </main>
 
       <nav className="tabbar">
         {TABS.map(({ route: r, label, Icon }) => (
           <button
             key={r}
-            className={r === route ? 'tab active' : 'tab'}
+            className={r === activeTab ? 'tab active' : 'tab'}
             onClick={() => go(r)}
-            aria-current={r === route ? 'page' : undefined}
+            aria-current={r === activeTab ? 'page' : undefined}
           >
             <Icon />
             <span>{label}</span>

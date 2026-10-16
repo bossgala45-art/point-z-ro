@@ -1,4 +1,6 @@
 import { useSyncExternalStore } from 'react'
+import { currentDay, daysBetween } from './day'
+import { DEFAULT_MISSIONS, type Mission, type Phase } from './missions'
 
 // Toutes les données vivent ici, dans le stockage local du téléphone.
 // Rien n'est envoyé sur Internet.
@@ -15,26 +17,39 @@ export interface Settings {
   apiKey: string
 }
 
+export interface Checkin {
+  mood: number // 1 à 10
+  energy: number
+  stress: number
+  /** « Une chose que j'ai réussie aujourd'hui » */
+  win: string
+  savedAt: string
+}
+
+export interface DayLog {
+  /** Identifiants des missions tenues ce jour-là. */
+  done: string[]
+  checkin?: Checkin
+}
+
 export interface AppData {
   version: 1
   /** Jour 1 de l'aventure, au format AAAA-MM-JJ. */
   startDate: string
   settings: Settings
+  missions: Mission[]
+  phase: Phase
+  phaseStartDate: string
+  days: Record<string, DayLog>
 }
 
 const KEY = 'pointzero:v1'
 
-export function todayKey(d = new Date()): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
 function defaults(): AppData {
+  const today = currentDay()
   return {
     version: 1,
-    startDate: todayKey(),
+    startDate: today,
     settings: {
       firstName: '',
       bedtime: '23:30',
@@ -42,6 +57,10 @@ function defaults(): AppData {
       reminders: { morning: '06:30', noon: '12:30', evening: '23:15' },
       apiKey: '',
     },
+    missions: DEFAULT_MISSIONS,
+    phase: 1,
+    phaseStartDate: today,
+    days: {},
   }
 }
 
@@ -53,6 +72,7 @@ function load(): AppData {
     const saved = JSON.parse(raw) as Partial<AppData>
     return {
       ...base,
+      phaseStartDate: saved.startDate ?? base.phaseStartDate,
       ...saved,
       settings: {
         ...base.settings,
@@ -86,6 +106,29 @@ export function updateSettings(patch: Partial<Settings>) {
   update((d) => ({ ...d, settings: { ...d.settings, ...patch } }))
 }
 
+function updateDay(day: string, fn: (log: DayLog) => DayLog) {
+  update((d) => ({ ...d, days: { ...d.days, [day]: fn(d.days[day] ?? { done: [] }) } }))
+}
+
+export function toggleMission(day: string, id: string) {
+  updateDay(day, (log) => ({
+    ...log,
+    done: log.done.includes(id) ? log.done.filter((x) => x !== id) : [...log.done, id],
+  }))
+}
+
+export function setMissionsDone(day: string, done: string[]) {
+  updateDay(day, (log) => ({ ...log, done }))
+}
+
+export function saveCheckin(day: string, checkin: Checkin) {
+  updateDay(day, (log) => ({ ...log, checkin }))
+}
+
+export function setMissions(missions: Mission[]) {
+  update((d) => ({ ...d, missions }))
+}
+
 export function eraseAll() {
   try {
     localStorage.removeItem(KEY)
@@ -106,11 +149,8 @@ export function useData(): AppData {
 }
 
 /** Numéro du jour depuis le début (jour 1 = premier jour). */
-export function dayNumber(startDate: string, now = new Date()): number {
-  const [y, m, d] = startDate.split('-').map(Number)
-  const start = new Date(y, m - 1, d)
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  return Math.round((today.getTime() - start.getTime()) / 86_400_000) + 1
+export function dayNumber(startDate: string): number {
+  return daysBetween(startDate, currentDay()) + 1
 }
 
 /** Demande au navigateur de ne pas effacer nos données quand il manque de place. */

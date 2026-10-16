@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { todayKey, update } from '../lib/store'
+import { currentDay } from '../lib/day'
+import { update } from '../lib/store'
 import InstallHelp from './InstallHelp'
 import { isStandalone } from '../lib/install'
 
@@ -11,7 +12,8 @@ export default function Welcome() {
     if (!ok) return
     update((d) => ({
       ...d,
-      startDate: todayKey(),
+      startDate: currentDay(),
+      phaseStartDate: currentDay(),
       settings: { ...d.settings, firstName: name.trim() },
     }))
   }

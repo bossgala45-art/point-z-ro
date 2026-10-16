@@ -7,8 +7,21 @@ export type Route =
   | 'confident'
   | 'reglages'
   | 'sos'
+  | 'bilan'
+  | 'missions'
 
-const ROUTES: Route[] = ['aujourdhui', 'progres', 'carnet', 'confident', 'reglages', 'sos']
+const ROUTES: Route[] = ['aujourdhui', 'progres', 'carnet', 'confident', 'reglages', 'sos', 'bilan', 'missions']
+
+/** Écrans « enfants » : ils ont un bouton retour et allument l'onglet parent. */
+export const PARENT: Partial<Record<Route, Route>> = {
+  bilan: 'aujourdhui',
+  missions: 'reglages',
+}
+
+export function back(fallback: Route) {
+  if (window.history.length > 1) window.history.back()
+  else go(fallback)
+}
 
 function read(): Route {
   const h = window.location.hash.replace(/^#\/?/, '') as Route
